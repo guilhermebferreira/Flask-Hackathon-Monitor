@@ -14,10 +14,12 @@ client_secret = os.environ['client_secret']
 authorization_base_url = 'https://github.com/login/oauth/authorize'
 token_url = 'https://github.com/login/oauth/access_token'
 
+github = OAuth2Session(client_id)
+
 
 @app.route("/")
 def demo():
-    github = OAuth2Session(client_id)
+    #github = OAuth2Session(client_id)
     authorization_url, state = github.authorization_url(authorization_base_url)
 
     session['oauth_state'] = state
@@ -43,7 +45,7 @@ def profile():
     """Fetching a protected resource using an OAuth 2 token.
     """
     github = OAuth2Session(client_id, token=session['oauth_token'])
-    return repo_details('https://api.github.com/repos/guilhermebferreira/horta-urbana', github)
+    return repo_details('https://api.github.com/repos/guilhermebferreira/horta-urbana')
     #return jsonify(github.get('https://api.github.com/user').json())
 
 
@@ -55,14 +57,26 @@ def repo():
         repoItem = json.loads(r.text or r.content)
         return "Django repository created: " + repoItem['created_at']
 
+@app.route('/lang')
+def repo():
+    return repo_languages('https://api.github.com/repos/guilhermebferreira/horta-urbana')
+
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print(str(message))
     sys.stdout.flush()
 
-def repo_details(repo, github):
+def repo_details(repo):
     r = github.get(repo).json()
+
     return jsonify(r)
+
+def repo_languages(repo):
+
+    r = github.get(repo).json()
+    l = github.get(r['languages_url']).json()
+
+    return jsonify(l)
 
 if __name__ == "__main__":
     # This allows us to use a plain HTTP callback
