@@ -59,6 +59,14 @@ def repo():
 def language():
     return repo_languages('https://api.github.com/repos/guilhermebferreira/horta-urbana')
 
+@app.route('/collaborators')
+def collaborators():
+    return repo_collaborators('https://api.github.com/repos/guilhermebferreira/horta-urbana')
+
+@app.route('/commits')
+def commits():
+    return repo_commits('https://api.github.com/repos/guilhermebferreira/horta-urbana')
+
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print(str(message))
@@ -78,6 +86,22 @@ def repo_languages(repo):
     l = github.get(r['languages_url']).json()
 
     return jsonify(l)
+
+def repo_collaborators(repo):
+
+    github = OAuth2Session(client_id, token=session['oauth_token'])
+    r = github.get(repo).json()
+    c = github.get(r['collaborators_url']).json()
+
+    return jsonify(c)
+
+def repo_commits(repo):
+
+    github = OAuth2Session(client_id, token=session['oauth_token'])
+    r = github.get(repo).json()
+    c = github.get(r['commits_url']).json()
+
+    return jsonify(c)
 
 if __name__ == "__main__":
     # This allows us to use a plain HTTP callback
