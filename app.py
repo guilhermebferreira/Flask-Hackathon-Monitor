@@ -42,7 +42,8 @@ def callback():
 def profile():
     """Fetching a protected resource using an OAuth 2 token.
     """
-    return repo_details('https://api.github.com/repos/guilhermebferreira/horta-urbana')
+    github = OAuth2Session(client_id, token=session['oauth_token'])
+    return repo_details('https://api.github.com/repos/guilhermebferreira/horta-urbana', github)
     #return jsonify(github.get('https://api.github.com/user').json())
 
 
@@ -63,9 +64,8 @@ def log(message):  # simple wrapper for logging to stdout on heroku
     print(str(message))
     sys.stdout.flush()
 
-def repo_details(repo):
+def repo_details(repo, github):
 
-    github = OAuth2Session(client_id, token=session['oauth_token'])
     r = github.get(repo).json()
 
     return jsonify(r)
