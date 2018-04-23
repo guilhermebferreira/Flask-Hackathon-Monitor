@@ -53,10 +53,12 @@ def profile():
     ]
 
     details = []
+    details_todos = []
     for r in repos:
-        details.append(repo_last_event(r))
+        data =  repo_last_event(r)
+        details_todos.append(data)
 
-    return jsonify(details)
+    return jsonify(details_todos)
     #return repo_details('https://api.github.com/repos/aricaldeira/PySPED')
     #return jsonify(github.get('https://api.github.com/user').json())
 
@@ -73,13 +75,6 @@ def repo():
 def language():
     return repo_languages('https://api.github.com/repos/guilhermebferreira/horta-urbana')
 
-@app.route('/collaborators') #parece não ser possivel ou garantido ler esses dados (carece de permissão especifica em alguns casos - deu erro quando o projeto pertencia a uma organização)
-def collaborators():
-    return repo_collaborators('https://api.github.com/repos/guilhermebferreira/horta-urbana')
-
-@app.route('/commits')
-def commits():
-    return repo_commits('https://api.github.com/repos/guilhermebferreira/horta-urbana')
 
 
 def log(message):  # simple wrapper for logging to stdout on heroku
@@ -105,9 +100,24 @@ def repo_last_event(repo):
     log(len(r))
 
     if len(r)>0:
-        return r[0]
+        return {
+                'user_avatar': r[0]['actor']['avatar_url'],
+                'user_login': r[0]['actor']['login'],
+                'user_url': r[0]['actor']['url'],
+                'created_at': r[0]['created_at'],
+                'type': r[0]['type']
 
-    return r
+            }
+
+
+    return {
+                'user_avatar': '',
+                'user_login': '',
+                'user_url': '',
+                'created_at': '',
+                'type': ''
+
+            }
 
 def log(msg): #print on heroku log
     print(msg)
@@ -121,24 +131,6 @@ def repo_languages(repo):
     l = github.get(r['languages_url']).json()
 
     return jsonify(l)
-
-def repo_collaborators(repo):
-
-    github = OAuth2Session(client_id, token=session['oauth_token'])
-    r = github.get(repo).json()
-    c = github.get(r['collaborators_url']).json()
-
-    return jsonify(c)
-
-def repo_commits(repo):
-
-    github = OAuth2Session(client_id, token=session['oauth_token'])
-    r = github.get(repo).json()
-    c = github.get(r['commits_url']).json()
-
-    return jsonify(c)
-
-
 
 if __name__ == "__main__":
     # This allows us to use a plain HTTP callback
