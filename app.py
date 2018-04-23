@@ -1,13 +1,15 @@
 from requests_oauthlib import OAuth2Session
 from flask import Flask, request, redirect, session, url_for, json
 from flask.json import jsonify
-import os, sys, requests
+import os, sys, requests, string, random
 
 app = Flask(__name__)
 
-app.secret_key = "super secret key"
 
 # This information is obtained upon registration of a new GitHub
+
+#app.secret_key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(24)])
+app.secret_key = 'susper_secret_key'
 
 client_id = os.environ['client_id']
 client_secret = os.environ['client_secret']
@@ -43,7 +45,19 @@ def profile():
     """Fetching a protected resource using an OAuth 2 token.
     """
     github = OAuth2Session(client_id, token=session['oauth_token'])
-    return repo_details('https://api.github.com/repos/guilhermebferreira/horta-urbana')
+
+    repos = [
+        'https://api.github.com/repos/aricaldeira/PySPED',
+        'https://api.github.com/repos/guilhermebferreira/horta-urbana',
+        'https://api.github.com/repos/guilhermebferreira/python-github-api'
+    ]
+
+    details = []
+    for r in repos:
+        details.append(repo_last_event(r))
+
+    return jsonify(details)
+    #return repo_details('https://api.github.com/repos/aricaldeira/PySPED')
     #return jsonify(github.get('https://api.github.com/user').json())
 
 
@@ -59,7 +73,7 @@ def repo():
 def language():
     return repo_languages('https://api.github.com/repos/guilhermebferreira/horta-urbana')
 
-@app.route('/collaborators')
+@app.route('/collaborators') #parece não ser possivel ou garantido ler esses dados (carece de permissão especifica em alguns casos - deu erro quando o projeto pertencia a uma organização)
 def collaborators():
     return repo_collaborators('https://api.github.com/repos/guilhermebferreira/horta-urbana')
 
@@ -77,11 +91,32 @@ def repo_details(repo):
     github = OAuth2Session(client_id, token=session['oauth_token'])
     r = github.get(repo).json()
 
-    return jsonify(r)
+    return r
+
+def repo_last_event(repo):
+
+    github = OAuth2Session(client_id, token=session['oauth_token'])
+    url = ''.join([repo, '/events'])
+    r = github.get(url).json()
+
+    log('repo_last_event:')
+    log(url)
+    log('size:')
+    log(len(r))
+
+    if len(r)>0:
+        return r[0]
+
+    return r
+
+def log(msg): #print on heroku log
+    print(msg)
+    sys.stdout.flush()
 
 def repo_languages(repo):
 
     github = OAuth2Session(client_id, token=session['oauth_token'])
+
     r = github.get(repo).json()
     l = github.get(r['languages_url']).json()
 
@@ -103,9 +138,12 @@ def repo_commits(repo):
 
     return jsonify(c)
 
+
+
 if __name__ == "__main__":
     # This allows us to use a plain HTTP callback
 
     os.environ['DEBUG'] = "1"
+
 
     app.run(debug=True)
