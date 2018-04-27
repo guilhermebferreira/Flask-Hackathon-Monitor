@@ -1,10 +1,14 @@
-from requests_oauthlib import OAuth2Session 
+from requests_oauthlib import OAuth2Session
+from flask_bootstrap import Bootstrap
 from flask import Flask, request, redirect, session, url_for, json, render_template
 from flask.json import jsonify
 import os, sys, requests, string, random, datetime
 
+from operator import itemgetter
+
 app = Flask(__name__)
 
+bootstrap = Bootstrap(app)
 
 templates_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 
@@ -50,16 +54,23 @@ def profile():
     repos = [
         'https://api.github.com/repos/aricaldeira/PySPED',
         'https://api.github.com/repos/guilhermebferreira/horta-urbana',
+        'https://api.github.com/repos/guilhermebferreira/python-github-api',
+        'https://api.github.com/repos/guilhermebferreira/horta-urbana',
         'https://api.github.com/repos/guilhermebferreira/python-github-api'
     ]
 
-    details = []
     details_todos = []
     for r in repos:
         data = {**repo_last_event(r), **repo_details(r)}  # dict merge 3.5+
         details_todos.append(data)
 
-    return jsonify(details_todos)
+        # details = sorted(data, key=itemgetter('total_seconds_ago'))
+
+
+    pages = os.listdir(templates_path)
+    return render_template('cards.html', data=details_todos, pages=pages)
+
+    #return jsonify(details_todos)
     # return repo_details('https://api.github.com/repos/aricaldeira/PySPED')
     # return jsonify(github.get('https://api.github.com/user').json())
 
@@ -117,9 +128,10 @@ def repo_last_event(repo):
         d1 = datetime.datetime.strptime(r[0]['created_at'], fmt)
         d2 = datetime.datetime.now()
 
-        daysDiff, secondsDiff = (d2 - d1).days, (d2 - d1).seconds
-        minutesDiff = (secondsDiff % 3600) // 60
-        hoursDiff = daysDiff * 24 + secondsDiff // 3600
+        daysDiff, total_seconds = (d2 - d1).days, (d2 - d1).total_seconds()
+
+        hoursDiff = int(total_seconds / 3600)
+        minutesDiff = int(total_seconds / 60) % 60
 
         return {
             'user_avatar': r[0]['actor']['avatar_url'],
@@ -129,6 +141,7 @@ def repo_last_event(repo):
             'days_ago': daysDiff,
             'hours_ago': hoursDiff,
             'minutes_ago': minutesDiff,
+            'total_seconds_ago': total_seconds,
             'type': r[0]['type']
 
         }
@@ -139,8 +152,10 @@ def repo_last_event(repo):
         'user_url': '',
         'created_at': '',
 
+        'days_ago': 0,
         'hours_ago': 0,
         'minutes_ago': 0,
+        'total_seconds_ago': 0,
         'type': ''
 
     }
@@ -159,6 +174,121 @@ def repo_languages(repo):
 
     return jsonify(l)
 
+
+@app.route('/template')
+def template_test():
+    # method to test template locally
+
+    data_test = [
+        {
+            "created_at": "2018-04-26T19:16:33Z",
+            "description": "Sistema P\u00fablico de Escritura\u00e7\u00e3o Digital em Python",
+            "language": "Python",
+            "name": "PySPED",
+            "type": "PushEvent",
+            "url": "https://api.github.com/repos/aricaldeira/PySPED",
+            "user_avatar": "https://avatars.githubusercontent.com/u/185558?",
+            "user_login": "aricaldeira",
+            'days_ago': 0,
+            'hours_ago': 0,
+            'minutes_ago': 20,
+            'total_seconds_ago': 0,
+            "user_url": "https://api.github.com/users/aricaldeira"
+        },
+        {
+            "created_at": "",
+            "description": 'null',
+            "language": "Python",
+            "name": "horta-urbana",
+            "type": "",
+            "url": "https://api.github.com/repos/guilhermebferreira/horta-urbana",
+            "user_avatar": "",
+            "user_login": "",
+            'days_ago': 0,
+            'hours_ago': 20,
+            'minutes_ago': 0,
+            'total_seconds_ago': 0,
+            "user_url": ""
+        },
+        {
+            "created_at": "2018-04-23T01:43:49Z",
+            "description": 'null',
+            "language": "Python",
+            "name": "python-github-api",
+            "type": "PushEvent",
+            "url": "https://api.github.com/repos/guilhermebferreira/python-github-api",
+            "user_avatar": "https://avatars.githubusercontent.com/u/5393392?",
+            "user_login": "guilhermebferreira",
+            'days_ago': 3,
+            'hours_ago': 12,
+            'minutes_ago': 0,
+            'total_seconds_ago': 0,
+            "user_url": "https://api.github.com/users/guilhermebferreira"
+        },
+        {
+            "created_at": "",
+            "description": 'null',
+            "language": "Python",
+            "name": "horta-urbana",
+            "type": "",
+            "url": "https://api.github.com/repos/guilhermebferreira/horta-urbana",
+            "user_avatar": "",
+            "user_login": "",
+            'days_ago': 0,
+            'hours_ago': 20,
+            'minutes_ago': 0,
+            'total_seconds_ago': 0,
+            "user_url": ""
+        },
+        {
+            "created_at": "2018-04-23T01:43:49Z",
+            "description": 'null',
+            "language": "Python",
+            "name": "python-github-api",
+            "type": "PushEvent",
+            "url": "https://api.github.com/repos/guilhermebferreira/python-github-api",
+            "user_avatar": "https://avatars.githubusercontent.com/u/5393392?",
+            "user_login": "guilhermebferreira",
+            'days_ago': 3,
+            'hours_ago': 12,
+            'minutes_ago': 0,
+            'total_seconds_ago': 0,
+            "user_url": "https://api.github.com/users/guilhermebferreira"
+        },
+        {
+            "created_at": "",
+            "description": 'null',
+            "language": "Python",
+            "name": "horta-urbana",
+            "type": "",
+            "url": "https://api.github.com/repos/guilhermebferreira/horta-urbana",
+            "user_avatar": "",
+            "user_login": "",
+            'days_ago': 0,
+            'hours_ago': 20,
+            'minutes_ago': 0,
+            'total_seconds_ago': 0,
+            "user_url": ""
+        },
+        {
+            "created_at": "2018-04-23T01:43:49Z",
+            "description": 'null',
+            "language": "Python",
+            "name": "python-github-api",
+            "type": "PushEvent",
+            "url": "https://api.github.com/repos/guilhermebferreira/python-github-api",
+            "user_avatar": "https://avatars.githubusercontent.com/u/5393392?",
+            "user_login": "guilhermebferreira",
+            'days_ago': 3,
+            'hours_ago': 12,
+            'minutes_ago': 0,
+            'total_seconds_ago': 0,
+            "user_url": "https://api.github.com/users/guilhermebferreira"
+        }
+    ]
+
+    pages = os.listdir(templates_path)
+    return render_template('cards.html', data=data_test, pages=pages)
 
 
 
