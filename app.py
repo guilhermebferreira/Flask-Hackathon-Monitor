@@ -22,6 +22,8 @@ token_url = 'https://github.com/login/oauth/access_token'
 
 def repositories():
     return [
+        'https://api.github.com/repos/felipegomesgit13/ConQuest',
+        'https://api.github.com/repos/brunomoraisti/AppMedigo',
         'https://api.github.com/repos/SkyList/Hackathon-prototipo',
         'https://api.github.com/repos/brunnosales/argos',
         'https://api.github.com/repos/vilmarferreira/Triagem-AVC',
