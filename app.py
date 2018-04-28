@@ -2,9 +2,7 @@ from requests_oauthlib import OAuth2Session
 from flask_bootstrap import Bootstrap
 from flask import Flask, request, redirect, session, url_for, json, render_template
 from flask.json import jsonify
-import os, sys, requests, string, random, datetime
-
-from operator import itemgetter
+import os, sys, requests, string, random, datetime, operator
 
 app = Flask(__name__)
 
@@ -22,11 +20,25 @@ client_secret = os.environ['client_secret']
 authorization_base_url = 'https://github.com/login/oauth/authorize'
 token_url = 'https://github.com/login/oauth/access_token'
 
+def repositories():
+    return [
+        'https://api.github.com/repos/vilmarferreira/Triagem-AVC',
+        'https://api.github.com/repos/juleow/projeto_hackathon',
+        'https://api.github.com/repos/DanielArrais/snitchdedoduro',
+        'https://api.github.com/repos/BersonCrios/HeavyBattleSpace',
+        'https://api.github.com/repos/saviossmg/RageAttack',
+        'https://api.github.com/repos/Adailsonacj/OvelhaRunner'
+    ]
+
 
 @app.route("/")
 def demo():
     github = OAuth2Session(client_id)
     authorization_url, state = github.authorization_url(authorization_base_url)
+
+    log('home:')
+    log('state:')
+    log(state)
 
     session['oauth_state'] = state
     return redirect(authorization_url)
@@ -42,22 +54,46 @@ def callback():
 
     session['oauth_token'] = token
 
-    return redirect(url_for('.profile'))
+    return redirect(url_for('.acompanhamento'))
 
 
-@app.route("/profile", methods=["GET"])
-def profile():
+@app.route("/repos", methods=['GET'])
+def repos():
+    return jsonify(repositories())
+
+
+@app.route("/acompanhamento", methods=["GET"])
+def acompanhamento():
     """Fetching a protected resource using an OAuth 2 token.
     """
     github = OAuth2Session(client_id, token=session['oauth_token'])
 
-    repos = [
-        'https://api.github.com/repos/aricaldeira/PySPED',
-        'https://api.github.com/repos/guilhermebferreira/horta-urbana',
-        'https://api.github.com/repos/guilhermebferreira/python-github-api',
-        'https://api.github.com/repos/guilhermebferreira/horta-urbana',
-        'https://api.github.com/repos/guilhermebferreira/python-github-api'
-    ]
+    repos = repositories()
+
+    details_todos = []
+    for r in repos:
+        data = {**repo_last_event(r), **repo_details(r)}  # dict merge 3.5+
+        details_todos.append(data)
+
+        # details = sorted(data, key=itemgetter('total_seconds_ago'))
+
+    details_todos.sort(key=operator.itemgetter('inativo', 'total_seconds_ago', 'name'))
+    pages = os.listdir(templates_path)
+    return render_template('cards.html', data=details_todos, pages=pages)
+
+    #return jsonify(details_todos)
+    # return repo_details('https://api.github.com/repos/aricaldeira/PySPED')
+    # return jsonify(github.get('https://api.github.com/user').json())
+
+
+
+@app.route("/raw", methods=["GET"])
+def raw():
+    """Fetching a protected resource using an OAuth 2 token.
+    """
+    github = OAuth2Session(client_id, token=session['oauth_token'])
+
+    repos = repositories()
 
     details_todos = []
     for r in repos:
@@ -67,12 +103,9 @@ def profile():
         # details = sorted(data, key=itemgetter('total_seconds_ago'))
 
 
-    pages = os.listdir(templates_path)
-    return render_template('cards.html', data=details_todos, pages=pages)
+    details_todos.sort(key=operator.itemgetter('inativo', 'total_seconds_ago', 'name'))
+    return jsonify(details_todos)
 
-    #return jsonify(details_todos)
-    # return repo_details('https://api.github.com/repos/aricaldeira/PySPED')
-    # return jsonify(github.get('https://api.github.com/user').json())
 
 
 @app.route('/repo')
@@ -102,6 +135,7 @@ def repo_details(repo):
             'name': r['name'],
             'language': r['language'],
             'description': r['description'],
+            'html_url': r['html_url'],
             'url': r['url']
         }
     else:
@@ -109,8 +143,10 @@ def repo_details(repo):
             'name': '',
             'language': '',
             'description': '',
+            'html_url': '',
             'url': ''
         }
+
 
 
 def repo_last_event(repo):
@@ -142,6 +178,7 @@ def repo_last_event(repo):
             'hours_ago': hoursDiff,
             'minutes_ago': minutesDiff,
             'total_seconds_ago': total_seconds,
+            'inativo': 0,
             'type': r[0]['type']
 
         }
@@ -156,9 +193,35 @@ def repo_last_event(repo):
         'hours_ago': 0,
         'minutes_ago': 0,
         'total_seconds_ago': 0,
+        'inativo': 9,
         'type': ''
 
     }
+
+
+def repo_last_event_all(repo):
+    github = OAuth2Session(client_id, token=session['oauth_token'])
+    url = ''.join([repo, '/events'])
+    r = github.get(url).json()
+
+    log('repo_last_event:')
+    log(url)
+    log('size:')
+    log(len(r))
+
+    if len(r) > 0:
+
+        return jsonify(r[0])
+
+    return {
+        'user_avatar': '',
+        'user_login': '',
+        'user_url': '',
+        'created_at': '',
+        'type': ''
+
+    }
+
 
 
 def log(msg):  # print on heroku log
