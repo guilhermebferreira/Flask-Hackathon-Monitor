@@ -25,7 +25,7 @@ def repositories():
         'https://api.github.com/repos/felipegomesgit13/ConQuest',
         'https://api.github.com/repos/brunomoraisti/AppMedigo',
         'https://api.github.com/repos/SkyList/Hackathon-prototipo',
-        'https://api.github.com/repos/brunnosales/argos',
+        'https://api.github.com/repos/brunnosales/argos2',
         'https://api.github.com/repos/vilmarferreira/Triagem-AVC',
         'https://api.github.com/repos/juleow/projeto_hackathon',
         'https://api.github.com/repos/DanielArrais/snitchdedoduro',
@@ -105,6 +105,7 @@ def raw():
         details_todos.append(data)
 
         # details = sorted(data, key=itemgetter('total_seconds_ago'))
+
 
 
     details_todos.sort(key=operator.itemgetter('inativo', 'total_seconds_ago', 'name'))

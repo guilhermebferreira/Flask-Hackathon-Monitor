@@ -26,6 +26,7 @@
     <h5 class="my-0 mr-md-auto font-weight-normal">Dashboard</h5>
     <nav class="my-2 my-md-0 mr-md-3">
     </nav>
+    <a class="btn btn-outline-primary" target="_blank" href="https://github.com/guilhermebferreira/Flask-Hackathon-Monitor">Sobre</a>
     <a class="btn btn-outline-primary" href="/raw">Raw data</a>
     <a class="btn btn-outline-primary" href="#" onClick="window.location.reload()">Reload</a>
 </div>
@@ -51,10 +52,11 @@
                 <h4 class="my-0 font-weight-normal">{{ project.language }}</h4>
             </div>
             {% if project.user_avatar %}
-            <img class="card-img-top" src="{{ project.user_avatar }} " alt="{{ project.user_login }}">
+            <img class="card-img-top full-width" src="{{ project.user_avatar }} " alt="{{ project.user_login }}">
+            <span class="badge badge-success pull-right">última atividade</span>
             {% endif %}
             <div class="card-body">
-                <h1 class="card-title pricing-card-title">
+                <h2 class="card-title pricing-card-title">
 
                     {% if project.days_ago > 0 %}
                     {{ project.days_ago }}
@@ -70,8 +72,9 @@
                     <small class="text-muted"> inativo</small>
 
                     {% endif %}
+                </h2>
 
-                </h1>
+
                 <ul class="list-unstyled mt-3 mb-4">
                     <li>
                         <small>{{ project.description }}</small>
@@ -120,6 +123,13 @@
         <!-- -->
 
     </div>
+
+
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row footer">
+            <h6>Desenvolvido por <a href="https://github.com/guilhermebferreira">Guilherme Ferreira</a></h6>
+        </div>
+    </footer>
 
 
     <!-- -->
