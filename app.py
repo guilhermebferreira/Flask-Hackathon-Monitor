@@ -140,7 +140,9 @@ def acompanhamento():
 
     if refeicao:
         motiva.append(refeicao)
+        motiva.append(refeicao)
     if checkpoint:
+        motiva.append(motiva)
         motiva.append(motiva)
 
     return render_template('cards.html', data=details_todos, pages=pages, motiva=motiva)
