@@ -1,3 +1,20 @@
+
+.patrocinadores{
+position: fixed;
+
+  margin-bottom: 2em;
+  margin-left: 50%;
+  margin-right: 50%;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.patrocinadores img {
+  width: 20em;
+}
+
+
 body {
   background: url('images/jalapao-dunas.jpg'), linear-gradient(#b4bbc5, #fff, #fff);
   background-repeat: no-repeat;
