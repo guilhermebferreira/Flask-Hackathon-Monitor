@@ -2,31 +2,44 @@ div.neon{
 
   font-family: 'Exo 2', sans-serif;
 
+  font-size: 6rem;
     position: fixed;
     margin-top: 2em;
-    margin-left: 10%;
+    margin-left: 0;
     margin-right: 10%;
     left: 0;
     top: 0;
-    width: 50%;
-    
-}
+    width: auto;
 
+}
+div.neon2{
+
+  font-family: 'Exo 2', sans-serif;
+
+  font-size: 3rem;
+    position: fixed;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 10%;
+    left: 0;
+    top: 0;
+    width: auto;
+
+}
 
 
 @import url(https://fonts.googleapis.com/css?family=Exo+2:200i);
 
 :root {
   /* Base font size */
-  font-size: 10px;   
-  
+  font-size: 10px;
+
   /* Set neon color */
   --neon-text-color: #f40;
   --neon-border-color: #08f;
 }
 
 h1.neon {
-  font-size: 13rem;
   font-weight: 200;
   font-style: italic;
   color: #fff;

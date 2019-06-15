@@ -15,16 +15,25 @@
 {% block scripts %}
 <script>
 
-setTimeout('window.location.reload();', 30000);
+setTimeout('window.location.reload();', 10000);
 </script>
 {{super()}}
 {% endblock %}
 
 {% block content %}
 
-{% if not true %}
+{% if msg3 %}
  <div class="neon">
-<h1 contenteditable spellcheck="false" class="neon">checkpoint 10hrs</h1>
+<h1 contenteditable spellcheck="false" class="neon">{{ msg }}</h1>
+</div>
+    {% endif %}
+
+
+{% if motiva %}
+
+    {% set selected_motiva = motiva|random %}
+ <div class="neon">
+<h1 contenteditable spellcheck="false" class="neon">{{ selected_motiva }}</h1>
 </div>
     {% endif %}
 

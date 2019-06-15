@@ -99,7 +99,12 @@ def acompanhamento():
 
     details_todos.sort(key=operator.itemgetter('inativo', 'total_seconds_ago', 'name'))
     pages = os.listdir(templates_path)
-    return render_template('cards.html', data=details_todos, pages=pages)
+
+
+    motiva =["checkpoint 10hrs", "não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
+               "tem energético no freezer"]
+
+    return render_template('cards.html', data=details_todos, pages=pages, motiva=motiva)
 
     # return jsonify(details_todos)
     # return repo_details('https://api.github.com/repos/aricaldeira/PySPED')
@@ -391,8 +396,13 @@ def template_test():
         }
     ]
 
+    msg="checkpoint 10hrs"
+
+    motiva =["checkpoint 10hrs", "não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
+               "tem energético no freezer"]
+
     pages = os.listdir(templates_path)
-    return render_template('cards.html', data=data_test, pages=pages)
+    return render_template('cards.html', data=data_test, pages=pages,msg=msg, motiva=motiva)
 
 
 if __name__ == "__main__":
