@@ -23,17 +23,30 @@ token_url = 'https://github.com/login/oauth/access_token'
 
 def repositories():
     return [
-        'https://api.github.com/repos/felipegomesgit13/ConQuest',
-        'https://api.github.com/repos/brunomoraisti/AppMedigo',
-        'https://api.github.com/repos/brunnosales/argos2',
-        'https://api.github.com/repos/SkyList/Hackathon-prototipo',
-        'https://api.github.com/repos/vilmarferreira/Triagem-AVC',
-        'https://api.github.com/repos/juleow/projeto_hackathon',
-        'https://api.github.com/repos/DanielArrais/snitchdedoduro',
-        'https://api.github.com/repos/BersonCrios/HeavyBattleSpace',
-        'https://api.github.com/repos/saviossmg/RageAttack',
-        'https://api.github.com/repos/Adailsonacj/OvelhaRunner'
+        'https://api.github.com/repos/professorTalles/Hackaton2019',
+        'https://api.github.com/repos/lucaspedronet/hackathon-catolica-integra',
+        'https://api.github.com/repos/carlosccomp/hackaton2019',
+        'https://api.github.com/repos/jpmoraes59/tonolucro-game',
+        'https://api.github.com/repos/brunomoraisti/acadmy',
+        'https://api.github.com/repos/alutsu/tonolucro',
+        'https://api.github.com/repos/pedrohsantana1/HackathonUnicatolica2019',
+        'https://api.github.com/repos/weltonjr/Hackaton-Catolica-2019',
+        'https://api.github.com/repos/SkyList/api-hackathon-catolica',
+        'https://api.github.com/repos/SkyList/gestor-hackathon-catolica',
+        'https://api.github.com/repos/rfmeloneto/hackatom-2019',
+        'https://api.github.com/repos/flamolino/ToNoGame-HackthonCatolica2019',
+        'https://api.github.com/repos/GengisVhan/hackaton-catolica',
+        'https://api.github.com/repos/Manjor/education',
+        'https://api.github.com/repos/jhonathangimenes/catolica-hackathon',
+        'https://api.github.com/repos/FernandorMurta/education ',
+        'https://api.github.com/repos/Manjor/education',
+        'https://api.github.com/repos/pgsilva1/app-hackathon-catolica',
+        'https://api.github.com/repos/Nicollas1305/AppHackathon',
+        'https://api.github.com/repos/adailsonaguiar/quiz',
+        'https://api.github.com/repos/rcab/hackcatolica',
+        'https://api.github.com/repos/vilmarferreira/hackathon_uniCatolica'
     ]
+
 
 # projeto deletado
 #
@@ -161,8 +174,6 @@ def repo_details(repo):
             'html_url': repo,
             'url': repo
         }
-
-
 
 
 def repo_last_event(repo):
