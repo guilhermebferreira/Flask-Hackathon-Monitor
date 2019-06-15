@@ -51,7 +51,7 @@ setTimeout('window.location.reload();', 30000);
         <h4 class="my-0 font-weight-normal">{{ project.language }}</h4>
       </div>
       {% if project.user_avatar %}
-      <img class="card-img-top full-width" src="{{ project.user_avatar }} " alt="{{ project.user_login }}">
+      <img class="card-img-top img-responsive" src="{{ project.user_avatar }} " alt="{{ project.user_login }}">
       <span class="badge badge-success pull-right">última atividade</span>
       {% endif %}
       <div class="card-body">
