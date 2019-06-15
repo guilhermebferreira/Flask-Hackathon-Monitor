@@ -443,8 +443,11 @@ def template_test():
         }
     ]
 
-    motiva = ["não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
-              "tem energético no freezer", "coffe in, code out"]
+    motiva = [#"não sofra sozinho",
+              "se tiver duvida, chame um mentor", "alimente o readme.md",
+              #"tem energético no freezer",
+              "better commit!",
+              "coffe in, code out"]
     refeicao = getMessageRefeicao()
     checkpoint = getCheckpointMessage()
     if refeicao:
