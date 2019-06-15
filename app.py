@@ -3,7 +3,8 @@ from flask_bootstrap import Bootstrap
 from flask import Flask, request, redirect, session, url_for, json, render_template
 from flask.json import jsonify
 import os, sys, requests, string, random, datetime, operator
-import datetime as dt
+from  datetime import datetime
+import pytz
 
 app = Flask(__name__)
 
@@ -46,6 +47,33 @@ def repositories():
         'https://api.github.com/repos/rcab/hackcatolica',
         'https://api.github.com/repos/vilmarferreira/hackathon_uniCatolica'
     ]
+
+
+def getMessageRefeicao():
+    h = datetime.now(pytz.timezone('america/araguaina')).hour
+    if h <= 8:
+        return "café as 8h"
+
+    elif h <= 11:
+        return None
+    elif h <= 13:
+        return "lembre-se de comer algo"
+    elif h <= 16:
+        return "lanche as 16hrs"
+
+
+def getCheckpointMessage():
+    h = datetime.now(pytz.timezone('america/araguaina')).hour
+    if h <= 10:
+        return "checkpoint as 10hrs"
+    elif h <= 15:
+        return "checkpoint as 10hrs"
+    elif h <= 17:
+        return None
+    elif h < 18:
+        return "nos aproximando da reta final"
+    elif h <= 19:
+        return "reta final!!!!"
 
 
 # projeto deletado
@@ -101,11 +129,16 @@ def acompanhamento():
     details_todos.sort(key=operator.itemgetter('inativo', 'total_seconds_ago', 'name'))
     pages = os.listdir(templates_path)
 
-    h = dt.datetime.now().hour
-    print(h)
+    refeicao = getMessageRefeicao()
+    checkpoint = getCheckpointMessage()
 
-    motiva = ["checkpoint 10hrs", "não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
-              "tem energético no freezer"]
+    motiva = ["não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
+              "tem energético no freezer", "coffe in, code out"]
+
+    if refeicao:
+        motiva.append(refeicao)
+    if checkpoint:
+        motiva.append(motiva)
 
     return render_template('cards.html', data=details_todos, pages=pages, motiva=motiva)
 
@@ -154,8 +187,8 @@ def log(message):  # simple wrapper for logging to stdout on heroku
 def repo_details(repo):
     github = OAuth2Session(client_id, token=session['oauth_token'])
     r = github.get(repo).json()
-    #log('repo_details')
-    #log(repo)
+    # log('repo_details')
+    # log(repo)
 
     try:
         if len(r) > 0:
@@ -188,10 +221,10 @@ def repo_last_event(repo):
     url = ''.join([repo, '/events'])
     r = github.get(url).json()
 
-    #log('repo_last_event:')
-    #log(url)
-    #log('size:')
-    #log(len(r))
+    # log('repo_last_event:')
+    # log(url)
+    # log('size:')
+    # log(len(r))
 
     try:
 
@@ -255,10 +288,10 @@ def repo_last_event_all(repo):
     url = ''.join([repo, '/events'])
     r = github.get(url).json()
 
-    #log('repo_last_event:')
-    #log(url)
-    #log('size:')
-    #log(len(r))
+    # log('repo_last_event:')
+    # log(url)
+    # log('size:')
+    # log(len(r))
 
     if len(r) > 0:
         return jsonify(r[0])
@@ -291,6 +324,9 @@ def repo_languages(repo):
 def template_test():
     # method to test template locally
 
+    h = datetime.now(pytz.timezone('america/araguaina')).hour
+
+    print(h)
     data_test = [
         {
             "created_at": "2018-04-26T19:16:33Z",
@@ -399,13 +435,17 @@ def template_test():
         }
     ]
 
-    msg = "checkpoint 10hrs"
-
-    motiva = ["checkpoint 10hrs", "não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
-              "tem energético no freezer"]
+    motiva = ["não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
+              "tem energético no freezer", "coffe in, code out"]
+    refeicao = getMessageRefeicao()
+    checkpoint = getCheckpointMessage()
+    if refeicao:
+        motiva.append(refeicao)
+    if checkpoint:
+        motiva.append(motiva)
 
     pages = os.listdir(templates_path)
-    return render_template('cards.html', data=data_test, pages=pages, msg=msg, motiva=motiva)
+    return render_template('cards.html', data=data_test, pages=pages,  motiva=motiva)
 
 
 if __name__ == "__main__":
