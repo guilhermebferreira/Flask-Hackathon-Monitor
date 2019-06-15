@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask import Flask, request, redirect, session, url_for, json, render_template
 from flask.json import jsonify
 import os, sys, requests, string, random, datetime, operator
+import datetime as dt
 
 app = Flask(__name__)
 
@@ -99,6 +100,9 @@ def acompanhamento():
 
     details_todos.sort(key=operator.itemgetter('inativo', 'total_seconds_ago', 'name'))
     pages = os.listdir(templates_path)
+
+    h = dt.datetime.now().hour
+    print(h)
 
 
     motiva =["checkpoint 10hrs", "não sofra sozinho", "se tiver duvida, chame um mentor", "alimente o readme.md",
