@@ -1,12 +1,12 @@
 from requests_oauthlib import OAuth2Session
-#from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap
 from flask import Flask, request, redirect, session, url_for, json, render_template
 from flask.json import jsonify
 import os, sys, requests, string, random, datetime, operator
 
 app = Flask(__name__)
 
-#bootstrap = Bootstrap(app)
+bootstrap = Bootstrap(app)
 
 templates_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 
