@@ -10,7 +10,7 @@ position: fixed;
   width: 100%;
 }
 
-.patrocinadores img {
+.patrocinadores > img {
   width: 20em;
 }
 
