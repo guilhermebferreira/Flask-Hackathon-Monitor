@@ -51,6 +51,8 @@ def repositories():
 
 def getMessageRefeicao():
     h = datetime.now(pytz.timezone('america/araguaina')).hour
+    print(h)
+
     if h <= 8:
         return "café as 8h"
 
@@ -64,6 +66,7 @@ def getMessageRefeicao():
 
 def getCheckpointMessage():
     h = datetime.now(pytz.timezone('america/araguaina')).hour
+    print(h)
     if h <= 10:
         return "checkpoint as 10hrs"
     elif h <= 15:
