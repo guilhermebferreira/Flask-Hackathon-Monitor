@@ -39,7 +39,6 @@ def repositories():
         'https://api.github.com/repos/Manjor/education',
         'https://api.github.com/repos/jhonathangimenes/catolica-hackathon',
         'https://api.github.com/repos/FernandorMurta/education ',
-        'https://api.github.com/repos/Manjor/education',
         'https://api.github.com/repos/pgsilva1/app-hackathon-catolica',
         'https://api.github.com/repos/Nicollas1305/AppHackathon',
         'https://api.github.com/repos/adailsonaguiar/quiz',
