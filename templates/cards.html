@@ -8,6 +8,7 @@
 {% block styles %}
 {{super()}}
 <link rel="stylesheet" href="/static/cards.css">
+<link rel="stylesheet" href="/static/neon.css">
 {% endblock %}
 
 
@@ -20,6 +21,12 @@ setTimeout('window.location.reload();', 30000);
 {% endblock %}
 
 {% block content %}
+
+{% if true %}
+ <div class="neon">
+<h1 contenteditable spellcheck="false" class="neon">checkpoint 10hrs</h1>
+</div>
+    {% endif %}
 
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
   <h5 class="my-0 mr-md-auto font-weight-normal">Dashboard</h5>
