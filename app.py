@@ -52,7 +52,7 @@ def repositories():
 def getMessageRefeicao():
     h = datetime.now(pytz.timezone('america/araguaina')).hour
     h = h - 3
-    print('time')
+    print('time:')
     print(h)
 
     if h <= 8:
